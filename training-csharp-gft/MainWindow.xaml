@@ -6,9 +6,42 @@
         xmlns:local="clr-namespace:TrainingCsharpGft"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
-    <Grid>
-        <Button Content="Button" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="364,86,0,0" Click="Button_Click"/>
-        <TextBlock x:Name="tb1" HorizontalAlignment="Left" Margin="376,150,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top"/>
+    <Grid Margin="15">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1.2*"/>
+            <ColumnDefinition Width="1.2*"/>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0.5*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="0.5*"/>
+            <RowDefinition Height="0.5*"/>
+        </Grid.RowDefinitions>
+
+        <Label Content="Accounts:" Margin="10" VerticalAlignment="Center"/>
+        <ListBox Grid.Row="1" Grid.RowSpan="3" Margin="10" Background="Gray">
+            
+        </ListBox>
+        <Button Grid.Row="4" Margin="10" Content="Choose account"/>
+        <Button Grid.Row="5" Margin="10" Content="Add new account..."/>
+
+        <Label Grid.Column="1" VerticalAlignment="Center" Margin="20 0 10 0" Content="Balance:"/>
+        <Label Grid.Column="1" Grid.Row="1" VerticalAlignment="Center" Margin="20 0 10 0" Content="Account: "/>
+        <TextBlock Grid.Column="2" Grid.ColumnSpan="2" Grid.RowSpan="2" Background="LightGreen" 
+                   FontSize="50" TextAlignment="Center" TextWrapping="Wrap"/>
+        <TextBox Grid.Column="1" Grid.Row="2" Background="LightBlue" Margin="20 20 10 20" TextWrapping="Wrap"/>
+        <Button Grid.Column="1" Grid.Row="3" Margin="20 10 10 10" Content="Top-up"/>
+        <ComboBox Grid.Column="2" Grid.Row="2" Margin="10 20" >
+            
+        </ComboBox>
+        <TextBox Grid.Column="3" Grid.Row="2" Background="LightBlue" Margin="10 20" TextWrapping="Wrap"/>
+        <Button Grid.Column="2" Grid.ColumnSpan="2" Grid.Row="3" Margin="10" Content="Transfer to selected account"/>
+        <Button Grid.Column="2" Grid.ColumnSpan="2" Grid.Row="5" Margin="10" Content="Delete your account"/>
+
 
     </Grid>
 </Window>

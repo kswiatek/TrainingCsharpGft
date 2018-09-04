@@ -29,9 +29,5 @@ namespace TrainingCsharpGft
 
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            tb1.Text = api.Example().ToString();
-        }
     }
 }
