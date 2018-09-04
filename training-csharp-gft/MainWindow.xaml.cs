@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using training_csharp_gft_api;
 
 namespace training_csharp_gft
 {
@@ -20,9 +21,17 @@ namespace training_csharp_gft
     /// </summary>
     public partial class MainWindow : Window
     {
+        Api api = new Api();
+
         public MainWindow()
         {
             InitializeComponent();
+
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            tb1.Text = api.Example().ToString();
         }
     }
 }
