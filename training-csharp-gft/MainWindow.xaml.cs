@@ -12,16 +12,16 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using training_csharp_gft_api;
+using TrainingCsharpGft.Api;
 
-namespace training_csharp_gft
+namespace TrainingCsharpGft
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window
     {
-        Api api = new Api();
+        Accounts api = new Accounts();
 
         public MainWindow()
         {
