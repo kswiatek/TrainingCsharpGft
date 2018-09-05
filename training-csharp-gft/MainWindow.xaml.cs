@@ -29,5 +29,39 @@ namespace TrainingCsharpGft
 
         }
 
+        private void lb_accounts_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
+
+        private void btn_selectAccount_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void btn_addNewAccount_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void btn_topUp_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void cbo_accountToTransfer_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
+
+        private void btn_transferToSelectedAccount_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void btn_deleteYourAccount_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }
