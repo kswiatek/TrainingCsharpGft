@@ -17,14 +17,10 @@ namespace TrainingCsharpGft.Api
             accounts.Add("A3", new Account() { Name = "A3", Ballance = 3000 });
         }
 
-        public IEnumerable<Account> Get()
+        public Dictionary<string, Account> Get()
         {
-            List<Account> accountsList = new List<Account>();
-            foreach(var a in accounts.Values)
-            {
-                accountsList.Add(a);
-            }
-            return accountsList;
+            Dictionary<string, Account> accountsDictionary = new Dictionary<string, Account>(accounts);
+            return accountsDictionary;
         }
 
         public void Put(Account account)

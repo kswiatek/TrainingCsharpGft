@@ -9,7 +9,7 @@ namespace TrainingCsharpGft.Api
     interface IStore
     {
         void Put(Account account);
-        IEnumerable<Account> Get();
+        Dictionary<string, Account> Get();
         void Delete(string accountName);
     }
 }
