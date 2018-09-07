@@ -1,0 +1,32 @@
+﻿<Window x:Class="TrainingCsharpGft.CreateNewAccountWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:TrainingCsharpGft"
+        mc:Ignorable="d"
+        Title="CreateNewAccountWindow" Height="450" Width="800">
+    <Grid Background="LightSlateGray" Margin="100">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="0.5*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="1.3*"/>
+        </Grid.RowDefinitions>
+
+        <Label Grid.Column="0" Grid.Row="0" Content="Creating new account"/>
+        <Label Grid.Column="1" Grid.Row="0" Content="Enter name:" VerticalAlignment="Bottom"/>
+        <TextBox Grid.Column="1" Grid.Row="1" Name="txt_accountName" TextChanged="txt_accountName_TextChanged"/>
+        <Label Grid.Column="1" Grid.Row="2" Content="Enter initial amount:" VerticalAlignment="Bottom" MinHeight="25"/>
+        <TextBox Grid.Column="1" Grid.Row="3" Name="txt_accountInitialAmount" PreviewTextInput="txt_accountInitialAmount_PreviewTextInput" TextChanged="txt_accountInitialAmount_TextChanged"/>
+        <Button Grid.Column="1" Grid.Row="4" Content="Create!" VerticalAlignment="Bottom" MinHeight="40" Margin="0 5" 
+                Name="btn_createNewAccount" Click="btn_createNewAccount_Click"/>
+
+    </Grid>
+</Window>

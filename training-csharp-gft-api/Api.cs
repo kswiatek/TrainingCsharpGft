@@ -3,12 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.ComponentModel;
 
 namespace TrainingCsharpGft.Api
 {
-    public class Accounts : IStore
+    public class Accounts : IStore, INotifyPropertyChanged
     {
         public Dictionary<string, Account> accounts = new Dictionary<string, Account>();
+
+        public event PropertyChangedEventHandler PropertyChanged;
 
         public Accounts() //Examplary accounts
         {
@@ -28,12 +31,25 @@ namespace TrainingCsharpGft.Api
             if(!accounts.Keys.Contains(account.Name))
             {
                 accounts.Add(account.Name, account);
+                OnPropertyChanged("accountsAdded");
+            }
+            else
+            {
+                throw new Exception("Account with this name already exists!");
             }
         }
 
         public void Delete(string accountName)
         {
-            accounts.Remove(accountName);
+            if(accounts.ContainsKey(accountName))
+            {
+                accounts.Remove(accountName);
+                OnPropertyChanged("accountsRemoved");
+            }
+            else
+            {
+                throw new Exception("Account with this name does not exists!");
+            }
         }
 
         public void Transfer(string chargedAccountName, string toppedUpAccountName, double amount)
@@ -54,6 +70,13 @@ namespace TrainingCsharpGft.Api
             accounts[toppedUpAccountName].Ballance += amount;
         }
 
+        private void OnPropertyChanged(string property)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(property));
+            }
+        }
 
     }
 }
