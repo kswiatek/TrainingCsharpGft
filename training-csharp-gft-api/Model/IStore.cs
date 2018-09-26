@@ -6,10 +6,11 @@ using System.Threading.Tasks;
 
 namespace TrainingCsharpGft.Api
 {
-    interface IStore
+    public interface IStore
     {
         void Put(Account account);
-        Dictionary<string, Account> Get();
+        Account Get(string accountId);
+        IEnumerable<Account> GetAllAccounts();
         void Delete(string accountName);
     }
 }

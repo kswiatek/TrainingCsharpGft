@@ -4,8 +4,15 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TrainingCsharpGft"
+        xmlns:vm="clr-namespace:TrainingCsharpGft.ViewModel"
+        d:DataContext="{d:DesignInstance Type=vm:ViewModel}"
         mc:Ignorable="d"
         Title="CreateNewAccountWindow" Height="450" Width="800">
+
+    <Window.Resources>
+        <vm:ViewModel x:Key="vm"/>
+    </Window.Resources>
+
     <Grid Background="LightSlateGray" Margin="100">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
@@ -22,11 +29,14 @@
 
         <Label Grid.Column="0" Grid.Row="0" Content="Creating new account"/>
         <Label Grid.Column="1" Grid.Row="0" Content="Enter name:" VerticalAlignment="Bottom"/>
-        <TextBox Grid.Column="1" Grid.Row="1" Name="txt_accountName" TextChanged="txt_accountName_TextChanged"/>
+        <TextBox Grid.Column="1" Grid.Row="1" Name="txt_accountName"
+                 Text="{Binding CreatedAccountName, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Source={StaticResource vm}}"/> 
+        
         <Label Grid.Column="1" Grid.Row="2" Content="Enter initial amount:" VerticalAlignment="Bottom" MinHeight="25"/>
-        <TextBox Grid.Column="1" Grid.Row="3" Name="txt_accountInitialAmount" PreviewTextInput="txt_accountInitialAmount_PreviewTextInput" TextChanged="txt_accountInitialAmount_TextChanged"/>
+        <TextBox Grid.Column="1" Grid.Row="3" Name="txt_accountInitialAmount" 
+                 Text="{Binding CreatedAccountInitialAmount, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Source={StaticResource vm}}"/>
         <Button Grid.Column="1" Grid.Row="4" Content="Create!" VerticalAlignment="Bottom" MinHeight="40" Margin="0 5" 
-                Name="btn_createNewAccount" Click="btn_createNewAccount_Click"/>
+                Name="btn_createNewAccount" Command="{Binding ExecuteCreateNewAccountCommand, Source={StaticResource vm}}"/>
 
     </Grid>
 </Window>

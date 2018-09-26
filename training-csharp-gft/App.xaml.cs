@@ -5,6 +5,8 @@ using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using TrainingCsharpGft;
+using TrainingCsharpGft.ViewModel;
 
 namespace training_csharp_gft
 {
@@ -13,5 +15,11 @@ namespace training_csharp_gft
     /// </summary>
     public partial class App : Application
     {
+        private void StartupHandler(object sender, StartupEventArgs e)
+        {
+            var vm = new ViewModel();
+            var mainWindow = new MainWindow(vm);
+            mainWindow.Show();
+        }
     }
 }

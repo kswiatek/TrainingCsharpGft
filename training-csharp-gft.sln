@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrainingCsharpGft", "traini
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrainingCsharpGft.Api", "training-csharp-gft-api\TrainingCsharpGft.Api.csproj", "{C1C96EB1-E265-4A8D-B32B-4BF0031D1304}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrainingCsharpGft.Tests", "TrainingCSharpGft.Tests\TrainingCsharpGft.Tests.csproj", "{8880DDFF-559F-421A-9559-455E5A843C69}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{C1C96EB1-E265-4A8D-B32B-4BF0031D1304}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C1C96EB1-E265-4A8D-B32B-4BF0031D1304}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C1C96EB1-E265-4A8D-B32B-4BF0031D1304}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8880DDFF-559F-421A-9559-455E5A843C69}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8880DDFF-559F-421A-9559-455E5A843C69}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8880DDFF-559F-421A-9559-455E5A843C69}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8880DDFF-559F-421A-9559-455E5A843C69}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
