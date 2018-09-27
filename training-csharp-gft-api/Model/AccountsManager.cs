@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace TrainingCsharpGft.Api.Model
@@ -23,6 +24,7 @@ namespace TrainingCsharpGft.Api.Model
         {
             if (!accounts.Contains(account))
             {
+                Thread.Sleep(2000);
                 accounts.Add(account);
             }
             else
@@ -38,11 +40,13 @@ namespace TrainingCsharpGft.Api.Model
 
         public IEnumerable<Account> GetAllAccounts()
         {
+            Thread.Sleep(2000);
             return accounts;
         }
 
         public void Delete(string accountName)
         {
+            Thread.Sleep(2000);
             Account acc = accounts.First(x => x.Name == accountName);
             accounts.Remove(acc);
         }

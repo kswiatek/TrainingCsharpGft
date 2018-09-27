@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.ComponentModel;
 using TrainingCsharpGft.Api.Model;
+using System.Threading;
 
 namespace TrainingCsharpGft.Api
 {
@@ -28,6 +29,7 @@ namespace TrainingCsharpGft.Api
 
         public Account GetAccount(string accountName)
         {
+            Thread.Sleep(2000);
             return accountsManager.Get(accountName);
         }
 
