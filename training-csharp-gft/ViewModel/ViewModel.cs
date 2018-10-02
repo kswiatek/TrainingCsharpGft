@@ -11,11 +11,27 @@ using System.ComponentModel;
 using System.Text.RegularExpressions;
 using System.Collections.ObjectModel;
 using TrainingCsharpGft.Api.Model;
+using System.Collections.Concurrent;
+using System.Windows.Threading;
 
 namespace TrainingCsharpGft.ViewModel
 {
     public class ViewModel : INotifyPropertyChanged
     {
+        public ViewModel()
+        {
+            ExecuteTopUpAccountCommand = new Command(ExecuteTopUpAccount, canExecuteTopUpAccount);
+            ExecuteDeleteYourAccountCommand = new Command(ExecuteDeleteYourAccount, canExecuteDeleteYourAccount);
+            ExecuteTransferToSelectedAccountCommand = new Command(ExecuteTransferToSelectedAccount, canExecuteTransferToSelectedAccount);
+            ExecuteCreateNewAccountCommand = new Command(ExecuteCreateNewAccount, canExecuteCreateNewAccount);
+            ExecuteOpenCreateNewAccountWindowCommand = new Command(ExecuteOpenCreateNewAccountWindow, canExecuteOpenCreateNewAccountWindow);
+
+            cbo_accountToTransferItems = new ObservableCollection<string>();
+            lb_accountsItems = new ObservableCollection<string>();
+
+            FetchAccountsFromApi(true);
+        }
+
         public Command ExecuteTopUpAccountCommand { get; set; }
         public Command ExecuteDeleteYourAccountCommand { get; set; }
         public Command ExecuteTransferToSelectedAccountCommand { get; set; }
@@ -28,8 +44,56 @@ namespace TrainingCsharpGft.ViewModel
         Dictionary<string, Account> accounts = null;
         Account selectedAccount = null;
 
+        List<Task> changingBallanceTasksList = new List<Task>();
+
         public ObservableCollection<string> cbo_accountToTransferItems { get; set; }
         public ObservableCollection<string> lb_accountsItems { get; set; }
+
+        private bool _lb_accountsEnabled = true;
+        public bool lb_accountsEnabled
+        {
+            get { return _lb_accountsEnabled; }
+            set
+            {
+                _lb_accountsEnabled = value;
+                OnPropertyChanged("lb_accountsEnabled");
+            }
+        }
+
+        private Visibility _lbl_updatingBallanceVisibility = Visibility.Hidden;
+        public Visibility lbl_updatingBallanceVisibility
+        {
+            get { return _lbl_updatingBallanceVisibility; }
+            set
+            {
+                _lbl_updatingBallanceVisibility = value;
+                OnPropertyChanged("lbl_updatingBallanceVisibility");
+            }
+        }
+
+        private Visibility _lbl_deletingAccountVisibility = Visibility.Hidden;
+        public Visibility lbl_deletingAccountVisibility
+        {
+            get { return _lbl_deletingAccountVisibility; }
+            set
+            {
+                _lbl_deletingAccountVisibility = value;
+                OnPropertyChanged("lbl_deletingAccountVisibility");
+            }
+        }
+
+        private bool _gb_ballanceChangingControlsAvailability = true;
+        public bool gb_ballanceChangingControlsAvailability
+        {
+            get { return _gb_ballanceChangingControlsAvailability; }
+            set
+            {
+                _gb_ballanceChangingControlsAvailability = value;
+                OnPropertyChanged("gb_ballanceChangingControlsAvailability");
+            }
+        }
+
+
         private string _lb_accountsSelectedItem;
         public string lb_accountsSelectedItem
         {
@@ -130,20 +194,6 @@ namespace TrainingCsharpGft.ViewModel
             }
         }
 
-        public ViewModel()
-        {
-            ExecuteTopUpAccountCommand = new Command(ExecuteTopUpAccount, canExecuteTopUpAccount);
-            ExecuteDeleteYourAccountCommand = new Command(ExecuteDeleteYourAccount, canExecuteDeleteYourAccount);
-            ExecuteTransferToSelectedAccountCommand = new Command(ExecuteTransferToSelectedAccount, canExecuteTransferToSelectedAccount);
-            ExecuteCreateNewAccountCommand = new Command(ExecuteCreateNewAccount, canExecuteCreateNewAccount);
-            ExecuteOpenCreateNewAccountWindowCommand = new Command(ExecuteOpenCreateNewAccountWindow, canExecuteOpenCreateNewAccountWindow);
-
-            cbo_accountToTransferItems = new ObservableCollection<string>();
-            lb_accountsItems = new ObservableCollection<string>();
-            FetchAccountsFromApi();
-            LoadAccountsToMainListBox();
-        }
-
         private void CheckCanExecuteMethods()
         {
             ExecuteDeleteYourAccountCommand.RaiseCanExecuteChanged(null);
@@ -158,11 +208,28 @@ namespace TrainingCsharpGft.ViewModel
             selectedAccountNameLabel = "";
         }
 
-        private void FetchAccountsFromApi()
+        private async void FetchAccountsFromApi(bool LoadAccountsToMainListBox)
         {
-            try
+            if (LoadAccountsToMainListBox)
             {
-                accounts = api.GetAccounts();
+                lb_accountsEnabled = false;
+                lb_accountsItems.Add("updating accounts...");
+            }
+            try
+            {                   
+                var task = await Task.Run(() =>
+                {
+                    return api.GetAccounts();
+                });
+
+                accounts = task;
+                if(LoadAccountsToMainListBox)
+                {
+                    lb_accountsItems.Clear();
+                    foreach (var key in accounts.Keys)
+                        lb_accountsItems.Add(key);
+                    lb_accountsEnabled = true;
+                }
             }
             catch (Exception ex)
             {
@@ -170,19 +237,26 @@ namespace TrainingCsharpGft.ViewModel
             }
         }
 
-        public void ReloadAccountsDataFromApi()
+        private async void ExecuteTransferToSelectedAccount(object parameter)
         {
-            FetchAccountsFromApi();
-            LoadSelectedAccountData();
-        }
-
-        private void ExecuteTransferToSelectedAccount(object parameter)
-        {
+            lbl_updatingBallanceVisibility = Visibility.Visible;
             try
             {
-                amountManager.Transfer(selectedAccount.Name, _cbo_accountToTransferSelectedItem, transferAmount);
-                FetchAccountsFromApi();
-                selectedAccountBallanceText = selectedAccount.Ballance.ToString();
+                var task = new Task(() =>
+                {
+                    amountManager.Transfer(selectedAccount.Name, _cbo_accountToTransferSelectedItem, transferAmount);
+                });
+                task.Start();
+                changingBallanceTasksList.Add(task);
+
+                await Task.WhenAll(changingBallanceTasksList.ToArray());
+
+                if (!changingBallanceTasksList.Any(t => !t.IsCompleted))
+                {
+                    FetchAccountsFromApi(false);
+                    selectedAccountBallanceText = selectedAccount.Ballance.ToString();
+                    lbl_updatingBallanceVisibility = Visibility.Hidden;
+                }
             }
             catch (Exception ex)
             {
@@ -193,18 +267,32 @@ namespace TrainingCsharpGft.ViewModel
         private bool canExecuteTransferToSelectedAccount(object parameter)
         {
             if (selectedAccount != null && selectedAccount.Name.Length > 0 && transferAmount > 0 &&
-                cbo_accountToTransferSelectedItem != null && cbo_accountToTransferSelectedItem.Length > 0)
+                transferAmount <= selectedAccount.Ballance && cbo_accountToTransferSelectedItem != null &&
+                cbo_accountToTransferSelectedItem.Length > 0)
                 return true;
             return false;
         }
 
-        private void ExecuteTopUpAccount(object parameter)
+        private async void ExecuteTopUpAccount(object parameter)
         {
+            lbl_updatingBallanceVisibility = Visibility.Visible;
             try
             {
-                amountManager.TopUp(selectedAccount.Name, topUpAmount);
-                FetchAccountsFromApi();
-                selectedAccountBallanceText = selectedAccount.Ballance.ToString();
+                var task = new Task(() => 
+                {
+                    amountManager.TopUp(selectedAccount.Name, topUpAmount);
+                });
+                task.Start();
+                changingBallanceTasksList.Add(task);
+
+                await Task.WhenAll(changingBallanceTasksList.ToArray());
+
+                if(!changingBallanceTasksList.Any(t => !t.IsCompleted))
+                {
+                    FetchAccountsFromApi(false);
+                    selectedAccountBallanceText = selectedAccount.Ballance.ToString();
+                    lbl_updatingBallanceVisibility = Visibility.Hidden;
+                }
             }
             catch (Exception ex)
             {
@@ -219,18 +307,22 @@ namespace TrainingCsharpGft.ViewModel
             return false;
         }
 
-        private void ExecuteDeleteYourAccount(object parameter)
+        private async void ExecuteDeleteYourAccount(object parameter)
         {
+            gb_ballanceChangingControlsAvailability = false;
+            lbl_deletingAccountVisibility = Visibility.Visible;
             try
             {
-                api.DeleteAccount(selectedAccount.Name);
-                FetchAccountsFromApi();
-
-                lb_accountsItems.Clear();
-                LoadAccountsToMainListBox();
+                await Task.Run(() =>
+                {
+                    api.DeleteAccount(selectedAccount.Name);
+                });
+                FetchAccountsFromApi(true);
 
                 CleanLabels();
                 CheckCanExecuteMethods();
+                gb_ballanceChangingControlsAvailability = true;
+                lbl_deletingAccountVisibility = Visibility.Hidden;
             }
             catch (Exception ex)
             {
@@ -276,18 +368,10 @@ namespace TrainingCsharpGft.ViewModel
             };
             createNewAccountWindow.ShowDialog();
 
-            FetchAccountsFromApi();
-            lb_accountsItems.Clear();
-            LoadAccountsToMainListBox();
+            FetchAccountsFromApi(true);
 
             CleanLabels();
             CheckCanExecuteMethods();
-        }
-
-        private void LoadAccountsToMainListBox()
-        {
-            foreach (var key in accounts.Keys)
-                lb_accountsItems.Add(key);
         }
 
         private bool canExecuteOpenCreateNewAccountWindow(object parameter)
@@ -299,7 +383,10 @@ namespace TrainingCsharpGft.ViewModel
         {
             try
             {
-                api.AddNewAccount(new Account() { Name = createdAccountName, Ballance = createdAccountInitialAmount });
+                Task.Run(() => 
+                {
+                    api.AddNewAccount(new Account() { Name = createdAccountName, Ballance = createdAccountInitialAmount });
+                });
 
                 Window currentWindow = null;
                 foreach (Window window in Application.Current.Windows)

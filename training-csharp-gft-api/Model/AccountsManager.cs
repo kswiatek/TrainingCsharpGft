@@ -40,7 +40,7 @@ namespace TrainingCsharpGft.Api.Model
 
         public IEnumerable<Account> GetAllAccounts()
         {
-            Thread.Sleep(2000);
+            Thread.Sleep(3000);
             return accounts;
         }
 

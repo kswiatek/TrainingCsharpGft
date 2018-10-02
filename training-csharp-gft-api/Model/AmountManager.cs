@@ -35,6 +35,10 @@ namespace TrainingCsharpGft.Api.Model
         public void TopUp(string toppedUpAccountName, double amount)
         {
             Thread.Sleep(1000);
+            if(String.IsNullOrEmpty(toppedUpAccountName))
+                throw new Exception("Empty account name was given");
+            if (amount <= 0)
+                throw new Exception("Given amount was 0 or lower");
             Account ac = persistance.Get(toppedUpAccountName);
             ac.Ballance += amount;
         }

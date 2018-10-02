@@ -12,7 +12,7 @@
     <Window.Resources>
         <vm:ViewModel x:Key="vm"/>
     </Window.Resources>
-    
+
     <Grid Margin="15">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1.2*"/>
@@ -30,15 +30,16 @@
         </Grid.RowDefinitions>
 
         <Label Content="Accounts:" Margin="10 0 10 0" VerticalAlignment="Center"/>
-        <ListBox Grid.Row="1" Grid.RowSpan="3" Margin="10" Background="Gray" Name="lb_accounts"
-                 ItemsSource="{Binding lb_accountsItems, Mode=OneWay, Source={StaticResource vm}}"
+        <ListBox Grid.Row="1" Grid.RowSpan="3" Margin="10" Background="Gray" Name="lb_accounts" 
+                 IsEnabled="{Binding lb_accountsEnabled, Mode=OneWay, Source={StaticResource vm}, UpdateSourceTrigger=PropertyChanged}"
+                 ItemsSource="{Binding lb_accountsItems, Mode=OneWay, Source={StaticResource vm}, IsAsync=True}"
                  SelectedItem="{Binding lb_accountsSelectedItem, Source={StaticResource vm}, 
             Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
         <Button Grid.Row="5" Margin="10" Content="Add new account..." Name="btn_addNewAccount"
                 Command="{Binding ExecuteOpenCreateNewAccountWindowCommand, Source={StaticResource vm}}"/>
 
-        <Label Grid.Column="1" VerticalAlignment="Center" Margin="20 0 10 0" Content="Balance:"/>
+        <Label Grid.Column="1" VerticalAlignment="Center" Margin="20 0 10 0" Content="Ballance:"/>
         <StackPanel Grid.Column="1" Grid.Row="1" VerticalAlignment="Center">
             <Label Margin="20 0 10 0" Content="On account: " Height="25"/>
             <TextBlock Margin="20 0 10 0" Padding="5 5 0 0" Height="25"  Name="tb_selectedAccount"
@@ -47,36 +48,64 @@
         </StackPanel>
 
         <TextBlock Grid.Column="2" Grid.ColumnSpan="2" Grid.RowSpan="2" Background="LightGreen" 
-                   FontSize="50" TextAlignment="Center" TextWrapping="Wrap" Margin="10 10 10 0" Name="tb_ballance"
+                   FontSize="47" TextAlignment="Center" TextWrapping="Wrap" Margin="10 10 10 0" Name="tb_ballance"
                    Text="{Binding selectedAccountBallanceText, Source={StaticResource vm}, UpdateSourceTrigger=PropertyChanged}"/>
-        <StackPanel Grid.Column="1" Grid.Row="2" Margin="20 15 10 20" VerticalAlignment="Stretch">
-            <Label Content="Enter amount:" Padding="0 5 5 5"/>
-            <TextBox  Background="LightBlue" TextWrapping="Wrap" Name="txt_topUpAmount" VerticalAlignment="Stretch" MinHeight="22"
+        <Label Grid.Column="3" Grid.Row="1" Grid.ColumnSpan="1" Grid.RowSpan="1" VerticalAlignment="Bottom"
+               Foreground="Red" FontSize="17" Content="updating ballance..." Name="lbl_updatingBallance"
+               Visibility="{Binding lbl_updatingBallanceVisibility, Mode=OneWay, 
+            Source={StaticResource vm}, UpdateSourceTrigger=PropertyChanged}"/>
+
+        <GroupBox Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="3" Grid.RowSpan="2" Margin="10" Name="gb_ballanceChangingControls"
+                  IsEnabled="{Binding gb_ballanceChangingControlsAvailability, Source={StaticResource vm}, 
+            UpdateSourceTrigger=PropertyChanged, Mode=OneWay}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="5"/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+
+                <StackPanel Grid.Column="0" Grid.Row="0" Margin="10" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+                    <Label Content="Enter amount:" Padding="0 5 5 5"/>
+                    <TextBox  Background="LightBlue" TextWrapping="Wrap" Name="txt_topUpAmount" VerticalAlignment="Stretch" MinHeight="22"
                       Text="{Binding topUpAmount, Mode=TwoWay, Source={StaticResource vm}, UpdateSourceTrigger=PropertyChanged}"/>
-        </StackPanel>
-        <Button Grid.Column="1" Grid.Row="3" Margin="20 10 10 10" Content="Top-up" Name="btn_topUp" 
-                Command="{Binding ExecuteTopUpAccountCommand, Source={StaticResource vm}}"/>
-        
-        <StackPanel Grid.Column="2" Grid.Row="2" Margin="10 15 10 20">
-            <Label Content="Transfer to:" Padding="0 5 5 5"/>
-            <ComboBox  Name="cbo_accountToTransfer"
+                </StackPanel>
+                <Button Grid.Column="0" Grid.Row="3" Margin="10" Content="Top-up" Name="btn_topUp" 
+                    Command="{Binding ExecuteTopUpAccountCommand, Source={StaticResource vm}}"/>
+
+                <Separator Grid.Column="1" Grid.Row="0" Grid.RowSpan="2" Margin="2 5 2 1"
+                           Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}"  VerticalContentAlignment="Stretch" />
+
+                <StackPanel Grid.Column="2" Grid.Row="0" Margin="10">
+                    <Label Content="Transfer to:" Padding="0 5 5 5"/>
+                    <ComboBox  Name="cbo_accountToTransfer"
                        ItemsSource="{Binding cbo_accountToTransferItems, Source={StaticResource vm}, 
                 Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" 
                        SelectedItem="{Binding cbo_accountToTransferSelectedItem, 
                 Source={StaticResource vm}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-        </StackPanel>
-
-        <StackPanel Grid.Column="3" Grid.Row="2" Margin="10 15 10 20">
-            <Label Content="Enter amount:" Padding="0 5 5 5"/>
-            <TextBox Background="LightBlue" TextWrapping="Wrap" Name="txt_transferAmount" MinHeight="22"
+                </StackPanel>
+                <StackPanel Grid.Column="3" Grid.Row="0" Margin="10">
+                    <Label Content="Enter amount:" Padding="0 5 5 5"/>
+                    <TextBox Background="LightBlue" TextWrapping="Wrap" Name="txt_transferAmount" MinHeight="22"
                      Text="{Binding transferAmount, Mode=TwoWay, Source={StaticResource vm}, UpdateSourceTrigger=PropertyChanged}"/>
-        </StackPanel>
-
-        <Button Grid.Column="2" Grid.ColumnSpan="2" Grid.Row="3" Margin="10" Content="Transfer to selected account" 
+                </StackPanel>
+                <Button Grid.Column="2" Grid.ColumnSpan="2" Grid.Row="3" Margin="10" Content="Transfer to selected account" 
                 Name="btn_transferToSelectedAccount"
                 Command="{Binding ExecuteTransferToSelectedAccountCommand, Source={StaticResource vm}}"/>
+            </Grid>
+        </GroupBox>
+
+        <Label Grid.Column="2" Grid.Row="4" Grid.ColumnSpan="2" VerticalAlignment="Bottom"
+               Foreground="Red" FontSize="17" Margin="5 0" Content="Your account is being deleted, wait..." Name="lbl_deletingAccount"
+               Visibility="{Binding lbl_deletingAccountVisibility, Mode=OneWay, Source={StaticResource vm}, UpdateSourceTrigger=PropertyChanged}"/>
         <Button Grid.Column="2" Grid.ColumnSpan="2" Grid.Row="5" Margin="10" Content="Delete your account" Name="btn_deleteYourAccount"
                 Command="{Binding ExecuteDeleteYourAccountCommand, Source={StaticResource vm}}"/>
-        
+
+
     </Grid>
 </Window>
