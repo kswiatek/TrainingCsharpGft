@@ -72,7 +72,7 @@
 
                 <StackPanel Grid.Column="0" Grid.Row="0" Margin="10" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
                     <Label Content="Enter amount:" Padding="0 5 5 5"/>
-                    <TextBox  Background="LightBlue" TextWrapping="Wrap" Name="txt_topUpAmount" VerticalAlignment="Stretch" MinHeight="22"
+                    <TextBox InputScope="" Background="LightBlue" TextWrapping="Wrap" Name="txt_topUpAmount" VerticalAlignment="Stretch" MinHeight="22"
                       Text="{Binding topUpAmount, Mode=TwoWay, Source={StaticResource vm}, UpdateSourceTrigger=PropertyChanged}"/>
                 </StackPanel>
                 <Button Grid.Column="0" Grid.Row="3" Margin="10" Content="Top-up" Name="btn_topUp" 

@@ -22,7 +22,7 @@ namespace TrainingCsharpGft.Api.Model
 
         public void Put(Account account)
         {
-            if (!accounts.Contains(account))
+            if (!accounts.Any((acc) => acc.Name == account.Name))
             {
                 Thread.Sleep(2000);
                 accounts.Add(account);

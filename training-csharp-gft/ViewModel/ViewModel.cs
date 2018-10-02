@@ -158,13 +158,14 @@ namespace TrainingCsharpGft.ViewModel
                 OnPropertyChanged("selectedAccountBallanceText");
             }
         }
-
+        
         private double _topUpAmount;
         public double topUpAmount
         {
             get { return _topUpAmount; }
             set
             {
+                Console.WriteLine("ustawia: "+value);
                 _topUpAmount = value;
                 ExecuteTopUpAccountCommand.RaiseCanExecuteChanged(null);
             }
@@ -178,6 +179,7 @@ namespace TrainingCsharpGft.ViewModel
             {
                 _transferAmount = value;
                 ExecuteTransferToSelectedAccountCommand.RaiseCanExecuteChanged(null);
+                OnPropertyChanged("transferAmount");
             }
         }
 
@@ -266,6 +268,10 @@ namespace TrainingCsharpGft.ViewModel
 
         private bool canExecuteTransferToSelectedAccount(object parameter)
         {
+            if (selectedAccount != null && transferAmount > selectedAccount.Ballance)
+            {
+                transferAmount = selectedAccount.Ballance;
+            } 
             if (selectedAccount != null && selectedAccount.Name.Length > 0 && transferAmount > 0 &&
                 transferAmount <= selectedAccount.Ballance && cbo_accountToTransferSelectedItem != null &&
                 cbo_accountToTransferSelectedItem.Length > 0)
@@ -280,7 +286,7 @@ namespace TrainingCsharpGft.ViewModel
             {
                 var task = new Task(() => 
                 {
-                    amountManager.TopUp(selectedAccount.Name, topUpAmount);
+                    amountManager.TopUp(selectedAccount.Name, _topUpAmount);
                 });
                 task.Start();
                 changingBallanceTasksList.Add(task);
@@ -302,7 +308,7 @@ namespace TrainingCsharpGft.ViewModel
 
         private bool canExecuteTopUpAccount(object parameter)
         {
-            if (selectedAccount != null && selectedAccount.Name.Length > 0 && topUpAmount > 0)
+            if (selectedAccount != null && selectedAccount.Name.Length > 0 && _topUpAmount > 0)
                 return true;
             return false;
         }
