@@ -47,7 +47,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Model\AccountsManagerTests.cs" />
+    <Compile Include="Model\AmountManagerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ViewModel\ViewModelTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -57,6 +59,13 @@
       <Project>{c1c96eb1-e265-4a8d-b32b-4bf0031d1304}</Project>
       <Name>TrainingCsharpGft.Api</Name>
     </ProjectReference>
+    <ProjectReference Include="..\training-csharp-gft\TrainingCsharpGft.csproj">
+      <Project>{d5effb30-540f-45cf-a322-fd23db3f12dc}</Project>
+      <Name>TrainingCsharpGft</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="View\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

@@ -93,7 +93,6 @@ namespace TrainingCsharpGft.ViewModel
             }
         }
 
-
         private string _lb_accountsSelectedItem;
         public string lb_accountsSelectedItem
         {
@@ -165,7 +164,6 @@ namespace TrainingCsharpGft.ViewModel
             get { return _topUpAmount; }
             set
             {
-                Console.WriteLine("ustawia: "+value);
                 _topUpAmount = value;
                 ExecuteTopUpAccountCommand.RaiseCanExecuteChanged(null);
             }
