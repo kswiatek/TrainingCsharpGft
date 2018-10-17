@@ -13,6 +13,7 @@ using System.Collections.ObjectModel;
 using TrainingCsharpGft.Api.Model;
 using System.Collections.Concurrent;
 using System.Windows.Threading;
+using System.Threading;
 
 namespace TrainingCsharpGft.ViewModel
 {
@@ -44,7 +45,7 @@ namespace TrainingCsharpGft.ViewModel
         Dictionary<string, Account> accounts = null;
         Account selectedAccount = null;
 
-        List<Task> changingBallanceTasksList = new List<Task>();
+        Queue<object> changingBallanceTasksQueue = new Queue<object>();
 
         public ObservableCollection<string> cbo_accountToTransferItems { get; set; }
         public ObservableCollection<string> lb_accountsItems { get; set; }
@@ -208,7 +209,7 @@ namespace TrainingCsharpGft.ViewModel
             selectedAccountNameLabel = "";
         }
 
-        private async void FetchAccountsFromApi(bool LoadAccountsToMainListBox)
+        public async void FetchAccountsFromApi(bool LoadAccountsToMainListBox)
         {
             if (LoadAccountsToMainListBox)
             {
@@ -221,7 +222,7 @@ namespace TrainingCsharpGft.ViewModel
                 {
                     return api.GetAccounts();
                 });
-
+                
                 accounts = task;
                 if(LoadAccountsToMainListBox)
                 {
@@ -242,25 +243,25 @@ namespace TrainingCsharpGft.ViewModel
             lbl_updatingBallanceVisibility = Visibility.Visible;
             try
             {
-                var task = new Task(() =>
+                await Task.Run(() =>
                 {
+                    changingBallanceTasksQueue.Enqueue(new object());
                     amountManager.Transfer(selectedAccount.Name, _cbo_accountToTransferSelectedItem, transferAmount);
                 });
-                task.Start();
-                changingBallanceTasksList.Add(task);
-
-                await Task.WhenAll(changingBallanceTasksList.ToArray());
-
-                if (!changingBallanceTasksList.Any(t => !t.IsCompleted))
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Could not perform this operation: " + ex.Message);
+            }
+            finally
+            {
+                changingBallanceTasksQueue.Dequeue();
+                if (changingBallanceTasksQueue.Count == 0)
                 {
                     FetchAccountsFromApi(false);
                     selectedAccountBallanceText = selectedAccount.Ballance.ToString();
                     lbl_updatingBallanceVisibility = Visibility.Hidden;
                 }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Could not perform this operation: " + ex.Message);
             }
         }
 
@@ -282,25 +283,25 @@ namespace TrainingCsharpGft.ViewModel
             lbl_updatingBallanceVisibility = Visibility.Visible;
             try
             {
-                var task = new Task(() => 
+                await Task.Run(() => 
                 {
+                    changingBallanceTasksQueue.Enqueue(new object());
                     amountManager.TopUp(selectedAccount.Name, _topUpAmount);
                 });
-                task.Start();
-                changingBallanceTasksList.Add(task);
-
-                await Task.WhenAll(changingBallanceTasksList.ToArray());
-
-                if(!changingBallanceTasksList.Any(t => !t.IsCompleted))
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Could not perform this operation: " + ex.Message);
+            }
+            finally
+            {
+                changingBallanceTasksQueue.Dequeue();
+                if (changingBallanceTasksQueue.Count == 0)
                 {
                     FetchAccountsFromApi(false);
                     selectedAccountBallanceText = selectedAccount.Ballance.ToString();
                     lbl_updatingBallanceVisibility = Visibility.Hidden;
                 }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Could not perform this operation: " + ex.Message);
             }
         }
 
@@ -389,7 +390,9 @@ namespace TrainingCsharpGft.ViewModel
             {
                 Task.Run(() => 
                 {
-                    api.AddNewAccount(new Account() { Name = createdAccountName, Ballance = createdAccountInitialAmount });
+                    Account acc = new Account() { Name = createdAccountName };
+                    acc.Add(createdAccountInitialAmount);
+                    api.AddNewAccount(acc);
                 });
 
                 Window currentWindow = null;

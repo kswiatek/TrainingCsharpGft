@@ -10,6 +10,8 @@ namespace TrainingCsharpGft.Api.Model
     public class AmountManager
     {
         private IStore persistance;
+        object obj = new object();
+
 
         public AmountManager(IStore persistance)
         {
@@ -18,18 +20,29 @@ namespace TrainingCsharpGft.Api.Model
 
         public void Transfer(string chargedAccountName, string toppedUpAccountName, double amount)
         {
-            Thread.Sleep(1000);
             Account chargedAccount = persistance.Get(chargedAccountName);
             Account toppedUpAccount = persistance.Get(toppedUpAccountName);
-            if (chargedAccount.Ballance >= amount)
+
+            try
             {
-                chargedAccount.Ballance -= amount;
-                toppedUpAccount.Ballance += amount;
+                chargedAccount.Subtract(amount);
+                Thread.Sleep(1000);
             }
-            else
+            catch(Exception ex)
             {
-                throw new Exception("Insufficient funds");
+                throw ex;
             }
+
+            try
+            {
+                toppedUpAccount.Add(amount);
+                Thread.Sleep(1000);
+            }
+            catch(Exception ex)
+            {
+                chargedAccount.Add(amount);
+                throw ex;
+            }                 
         }
 
         public void TopUp(string toppedUpAccountName, double amount)
@@ -40,7 +53,7 @@ namespace TrainingCsharpGft.Api.Model
             if (amount <= 0)
                 throw new Exception("Given amount was 0 or lower");
             Account ac = persistance.Get(toppedUpAccountName);
-            ac.Ballance += amount;
+            ac.Add(amount);
         }
     }
 }

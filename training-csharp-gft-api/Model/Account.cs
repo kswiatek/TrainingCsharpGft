@@ -8,6 +8,7 @@ namespace TrainingCsharpGft.Api
 {
     public class Account
     {
+        private object obj = new object();
         private string name;
         private double ballance;
         public string Name
@@ -18,7 +19,25 @@ namespace TrainingCsharpGft.Api
         public double Ballance
         {
             get { return ballance; }
-            set { ballance = value; }
+        }
+
+        public void Add(double amount)
+        {
+            lock (obj)
+            {
+                ballance += amount;
+            }
+        }
+
+        public void Subtract(double amount)
+        {
+            lock (obj)
+            {
+                if (amount <= ballance)
+                    ballance -= amount;
+                else
+                    throw new Exception("Insufficient funds");
+            }
         }
 
     }

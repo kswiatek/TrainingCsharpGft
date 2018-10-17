@@ -6,6 +6,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using TrainingCsharpGft;
+using TrainingCsharpGft.Api;
+using TrainingCsharpGft.DataProvider;
 using TrainingCsharpGft.ViewModel;
 
 namespace training_csharp_gft
@@ -22,4 +24,5 @@ namespace training_csharp_gft
             mainWindow.Show();
         }
     }
+
 }

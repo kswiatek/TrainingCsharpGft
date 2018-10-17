@@ -68,6 +68,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Commands\Command.cs" />
+    <Compile Include="DataProvider\IAccountsDataProvider.cs" />
     <Compile Include="ViewModel\ViewModel.cs" />
     <Compile Include="View\CreateNewAccountWindow.xaml.cs">
       <DependentUpon>CreateNewAccountWindow.xaml</DependentUpon>

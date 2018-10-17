@@ -34,8 +34,9 @@ namespace TrainingCsharpGft.Tests.Model
         public void AccountsManagerShouldReturnAllAccountsOnGetAllAccounts()
         {
             var testAccount1 = new Account { Name = "test1" };
-            var testAccount2 = new Account { Name = "test2", Ballance = 200 };
+            var testAccount2 = new Account { Name = "test2" };
             var testAccount3 = new Account { Name = "test3" };
+            testAccount2.Add(200);
 
             storage.Put(testAccount1);
             storage.Put(testAccount2);
@@ -50,8 +51,9 @@ namespace TrainingCsharpGft.Tests.Model
         public void AccountsManagerShouldDeleteSpecifiedAccountOnDelete()
         {
             var testAccount1 = new Account { Name = "test1" };
-            var testAccount2 = new Account { Name = "test2", Ballance = 200 };
+            var testAccount2 = new Account { Name = "test2" };
             var testAccount3 = new Account { Name = "test3" };
+            testAccount2.Add(200);
 
             storage.Put(testAccount1);
             storage.Put(testAccount2);
