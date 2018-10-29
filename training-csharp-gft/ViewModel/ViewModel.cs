@@ -260,6 +260,7 @@ namespace TrainingCsharpGft.ViewModel
                 {
                     FetchAccountsFromApi(false);
                     selectedAccountBallanceText = selectedAccount.Ballance.ToString();
+                    ExecuteTransferToSelectedAccountCommand.RaiseCanExecuteChanged(null);
                     lbl_updatingBallanceVisibility = Visibility.Hidden;
                 }
             }
@@ -270,6 +271,7 @@ namespace TrainingCsharpGft.ViewModel
             if (selectedAccount != null && transferAmount > selectedAccount.Ballance)
             {
                 transferAmount = selectedAccount.Ballance;
+                OnPropertyChanged("transferAmount");
             } 
             if (selectedAccount != null && selectedAccount.Name.Length > 0 && transferAmount > 0 &&
                 transferAmount <= selectedAccount.Ballance && cbo_accountToTransferSelectedItem != null &&

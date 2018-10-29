@@ -25,8 +25,9 @@ namespace TrainingCsharpGft.Api.Model
 
             try
             {
+                Thread.Sleep(2000);
+                //Sleep before an actuall action prevents UI from updating transfer amount before action is done
                 chargedAccount.Subtract(amount);
-                Thread.Sleep(1000);
             }
             catch(Exception ex)
             {
@@ -35,8 +36,8 @@ namespace TrainingCsharpGft.Api.Model
 
             try
             {
+                Thread.Sleep(2000);
                 toppedUpAccount.Add(amount);
-                Thread.Sleep(1000);
             }
             catch(Exception ex)
             {
