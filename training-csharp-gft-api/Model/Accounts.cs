@@ -7,6 +7,8 @@ using System.ComponentModel;
 using TrainingCsharpGft.Api.Model;
 using System.Threading;
 
+[assembly: log4net.Config.XmlConfigurator(Watch = true)]
+
 namespace TrainingCsharpGft.Api
 {
     public class Accounts : INotifyPropertyChanged

@@ -8,6 +8,7 @@ namespace TrainingCsharpGft.Api
 {
     public class Account
     {
+        private static readonly log4net.ILog log = LogHelper.GetLogger();
         private object obj = new object();
         private string name;
         private double ballance;
@@ -27,6 +28,7 @@ namespace TrainingCsharpGft.Api
             {
                 ballance += amount;
             }
+            log.Info($"Account {name} has increased its amount by {amount}. Its ballance is now {ballance}.");
         }
 
         public void Subtract(double amount)
@@ -36,7 +38,12 @@ namespace TrainingCsharpGft.Api
                 if (amount <= ballance)
                     ballance -= amount;
                 else
+                {
+                    log.Error($"Insufficient funds - attempted to get {amount} " +
+                        $"from account {name} but its ballance was {ballance}.");
                     throw new Exception("Insufficient funds");
+                }
+                log.Info($"Account {name} has decreased its amount by {amount}. Its ballance is now {ballance}.");
             }
         }
 

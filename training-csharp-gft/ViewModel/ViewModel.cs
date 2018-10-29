@@ -280,7 +280,7 @@ namespace TrainingCsharpGft.ViewModel
 
         private async void ExecuteTopUpAccount(object parameter)
         {
-            lbl_updatingBallanceVisibility = Visibility.Visible;
+           lbl_updatingBallanceVisibility = Visibility.Visible;
             try
             {
                 await Task.Run(() => 

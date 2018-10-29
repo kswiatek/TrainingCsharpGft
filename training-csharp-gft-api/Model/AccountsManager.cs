@@ -9,6 +9,7 @@ namespace TrainingCsharpGft.Api.Model
 {
     public class AccountsManager : IStore
     {
+        private static readonly log4net.ILog log = LogHelper.GetLogger();
         private List<Account> accounts;
 
         public AccountsManager()
@@ -33,29 +34,35 @@ namespace TrainingCsharpGft.Api.Model
             {
                 Thread.Sleep(2000);
                 accounts.Add(account);
+                log.Info($"Account {account.Name} successfully added.");
             }
             else
             {
+                log.Error($"Attempted to create an account with name {account.Name} which already exists.");
                 throw new Exception("Account with this name already exists!");
             }
         }
 
         public Account Get(string accountName)
         {
+            log.Info($"Attempted to get {accountName} account data.");
             return accounts.First(x => x.Name == accountName);
         }
 
         public IEnumerable<Account> GetAllAccounts()
         {
+            log.Info($"Attempted to get all accounts data.");
             Thread.Sleep(3000);
             return accounts;
         }
 
         public void Delete(string accountName)
         {
+            log.Info($"Attempted to delete account {accountName}.");
             Thread.Sleep(2000);
             Account acc = accounts.First(x => x.Name == accountName);
             accounts.Remove(acc);
+            log.Info($"Account {accountName} successfully deleted.");
         }
 
     }
