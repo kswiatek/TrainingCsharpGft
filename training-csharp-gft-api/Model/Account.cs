@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Runtime.Serialization;
 
 namespace TrainingCsharpGft.Api
 {
+    [Serializable]
     public class Account
     {
         private static readonly log4net.ILog log = LogHelper.GetLogger();
