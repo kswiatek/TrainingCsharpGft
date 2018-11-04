@@ -26,6 +26,7 @@ namespace TrainingCsharpGft.ViewModel
             ExecuteTransferToSelectedAccountCommand = new Command(ExecuteTransferToSelectedAccount, canExecuteTransferToSelectedAccount);
             ExecuteCreateNewAccountCommand = new Command(ExecuteCreateNewAccount, canExecuteCreateNewAccount);
             ExecuteOpenCreateNewAccountWindowCommand = new Command(ExecuteOpenCreateNewAccountWindow, canExecuteOpenCreateNewAccountWindow);
+            ExecuteSaveAccountsToFileOnAppExitCommand = new Command(ExecuteSaveAccountsToFileOnAppExit, canExecuteSaveAccountsToFileOnAppExit);
 
             cbo_accountToTransferItems = new ObservableCollection<string>();
             lb_accountsItems = new ObservableCollection<string>();
@@ -38,6 +39,7 @@ namespace TrainingCsharpGft.ViewModel
         public Command ExecuteTransferToSelectedAccountCommand { get; set; }
         public Command ExecuteOpenCreateNewAccountWindowCommand { get; set; }
         public Command ExecuteCreateNewAccountCommand { get; set; }
+        public Command ExecuteSaveAccountsToFileOnAppExitCommand { get; set; }
 
         public static AccountsManager accountsManager = new AccountsManager();
         public Accounts api = new Accounts(accountsManager);
@@ -418,6 +420,16 @@ namespace TrainingCsharpGft.ViewModel
             if (createdAccountName != null && createdAccountName.Length > 0 && createdAccountInitialAmount > 0)
                 return true;
             return false;
+        }
+
+        private void ExecuteSaveAccountsToFileOnAppExit(object parameter)
+        {
+            accountsManager.SaveAccountsToFile();
+        }
+
+        private bool canExecuteSaveAccountsToFileOnAppExit(object parameter)
+        {
+            return true;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

@@ -23,6 +23,12 @@ namespace training_csharp_gft
             var mainWindow = new MainWindow(vm);
             mainWindow.Show();
         }
+
+        private void Application_Exit(object sender, ExitEventArgs e)
+        {
+            var vm = new ViewModel();
+            vm.ExecuteSaveAccountsToFileOnAppExitCommand.Execute(null);
+        }
     }
 
 }

@@ -20,18 +20,6 @@ namespace TrainingCsharpGft.Api.Model
         public AccountsManager()
         {
             accounts = new List<Account>();
-            //tests
-            //Account A1 = new Account() { Name = "A1" };
-            //A1.Add(1000);
-            //Account A2 = new Account() { Name = "A2" };
-            //A2.Add(2000);
-            //Account A3 = new Account() { Name = "A3" };
-            //A3.Add(3000);
-
-            //accounts.Add(A1);
-            //accounts.Add(A2);
-            //accounts.Add(A3);
-            
             LoadAccountsFromFile(accountsDataFilePath);
         }
 
@@ -63,6 +51,23 @@ namespace TrainingCsharpGft.Api.Model
             catch(Exception ex)
             {
                 log.Error($"There was a problem with loading accounts data from {filePath}:\n {ex.Message}");
+            }
+        }
+
+        public void SaveAccountsToFile(string filePath = accountsDataFilePath)
+        {
+            try
+            {
+                using (Stream stream = File.Open(filePath, FileMode.Create))
+                {
+                    BinaryFormatter bf = new BinaryFormatter();
+                    bf.Serialize(stream, accounts);
+                    log.Info($"Accounts data has been successfully saved. Closing application.");
+                }
+            }
+            catch(Exception ex)
+            {
+                log.Error($"There was a problem with saving accounts data to file: {filePath}:\n {ex.Message}");
             }
         }
 
