@@ -7,18 +7,26 @@ using System.Threading.Tasks;
 using NUnit.Framework;
 using TrainingCsharpGft.Api;
 using TrainingCsharpGft.Api.Model;
+using Moq;
 
 namespace TrainingCsharpGft.Tests.Model
 {
     class AmountManagerTests
     {
         private IStore storage;
+        private List<Account> accounts = new List<Account>();
         private AmountManager amountManager;
 
         [SetUp]
         public void TestSetUp()
         {
-            storage = new AccountsManager();
+            accounts.Clear();
+
+            var mockStorage = new Mock<IStore>();
+            mockStorage.Setup(x => x.Put(It.IsAny<Account>())).Callback<Account>(acc => accounts.Add(acc));
+            mockStorage.Setup(x => x.Get(It.IsAny<string>())).Returns((string accName) => accounts.First(acc => acc.Name == accName));
+            storage = mockStorage.Object;
+
             amountManager = new AmountManager(storage);
             var A1 = new Account { Name = "Acc1"};
             var A2 = new Account { Name = "Acc2"};
@@ -31,23 +39,42 @@ namespace TrainingCsharpGft.Tests.Model
             storage.Put(A3);
         }
 
-        [Test]
-        public void AmountManagerShouldTransferSpecifiedAmountBetweenAccountsOnTransfer()
+        [TestCase("Acc2", "Acc1", 300, "Acc2", 1700)]
+        [TestCase("Acc2", "Acc1", 300, "Acc1", 1300)]
+        [TestCase("Acc2", "Acc1", 1500, "Acc3", 3000)]
+        [TestCase("Acc2", "Acc1", 0, "Acc1", 1000)]
+        [TestCase("Acc2", "Acc1", 0, "Acc2", 2000)]
+        [TestCase("Acc2", "Acc1", 0, "Acc3", 3000)]
+        [TestCase("Acc3", "Acc1", 2900, "Acc3", 100)]
+        public void AmountManagerShouldTransferSpecifiedAmountBetweenAccountsOnTransfer(string chargedAccountName, 
+            string toppedUpAccountName, double amount, string checkingAccountName, double expectedBallance)
         {
-            amountManager.Transfer("Acc2", "Acc1", 300);
+            amountManager.Transfer(chargedAccountName, toppedUpAccountName, amount);
 
-            Assert.AreEqual(1300, storage.Get("Acc1").Ballance);
-            Assert.AreEqual(1700, storage.Get("Acc2").Ballance);
+            Assert.AreEqual(expectedBallance, storage.Get(checkingAccountName).Ballance);
         }
 
-        [Test]
-        public void AmountManagerShouldTopUpSpecifiedAccountWithGivenAmountOnTopUp()
+        [TestCase("Acc1", 50.5)]
+        [TestCase("Acc1", 0)]
+        [TestCase("Acc1", 4500)]
+        public void AmountManagerShouldTopUpSpecifiedAccountWithGivenAmountOnTopUp(string accountName, double amount)
         {
-            double ballance = storage.Get("Acc1").Ballance;
+            double ballance = storage.Get(accountName).Ballance;
 
-            amountManager.TopUp("Acc1", 50.5);
+            amountManager.TopUp("Acc1", amount);
 
-            Assert.AreEqual(ballance + 50.5, storage.Get("Acc1").Ballance);
+            Assert.AreEqual(ballance + amount, storage.Get(accountName).Ballance);
+        }
+
+        [TestCase(-100)]
+        [TestCase(-1)]
+        [TestCase(-0.654)]
+        public void AmountManagerShouldNotAcceptNegativeValuesOnTopUp(double value)
+        {
+            Assert.Throws<Exception>(() =>
+            {
+                amountManager.TopUp("Acc1", value);
+            });
         }
 
         [Test]
