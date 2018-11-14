@@ -410,7 +410,7 @@ namespace TrainingCsharpGft.ViewModel
 
         private bool canExecuteCreateNewAccount(object parameter)
         {
-            if (createdAccountName != null && createdAccountName.Length > 0 && createdAccountInitialAmount > 0)
+            if (createdAccountName != null && createdAccountName.Length > 0 && createdAccountInitialAmount >= 0)
                 return true;
             return false;
         }

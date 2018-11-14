@@ -34,7 +34,7 @@
         
         <Label Grid.Column="1" Grid.Row="2" Content="Enter initial amount:" VerticalAlignment="Bottom" MinHeight="25"/>
         <TextBox Grid.Column="1" Grid.Row="3" Name="txt_accountInitialAmount" 
-                 Text="{Binding CreatedAccountInitialAmount, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Source={StaticResource vm}}"/>
+                 Text="{Binding CreatedAccountInitialAmount, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Source={StaticResource vm}}" TextChanged="txt_accountInitialAmount_TextChanged"/>
         <Button Grid.Column="1" Grid.Row="4" Content="Create!" VerticalAlignment="Bottom" MinHeight="40" Margin="0 5" 
                 Name="btn_createNewAccount" Command="{Binding ExecuteCreateNewAccountCommand, Source={StaticResource vm}}"/>
 

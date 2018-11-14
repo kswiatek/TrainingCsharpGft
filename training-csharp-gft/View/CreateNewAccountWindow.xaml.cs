@@ -1,17 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using TrainingCsharpGft.Api;
 
 namespace TrainingCsharpGft
 {
@@ -27,9 +15,18 @@ namespace TrainingCsharpGft
 
         public CreateNewAccountWindow(ViewModel.ViewModel vm) : this()
         {
-            this.DataContext = vm;
+            DataContext = vm;
         }
 
+        private void txt_accountInitialAmount_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (btn_createNewAccount == null)
+                return;
 
+            if (double.TryParse(txt_accountInitialAmount.Text, out double temp))
+                btn_createNewAccount.IsEnabled = true;
+            else
+                btn_createNewAccount.IsEnabled = false;
+        }
     }
 }
