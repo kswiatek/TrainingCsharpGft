@@ -46,6 +46,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Exceptions\InsufficientFundsException.cs" />
+    <Compile Include="Exceptions\WrongValueException.cs" />
     <Compile Include="LogHelper.cs" />
     <Compile Include="Model\Account.cs" />
     <Compile Include="Model\Accounts.cs">

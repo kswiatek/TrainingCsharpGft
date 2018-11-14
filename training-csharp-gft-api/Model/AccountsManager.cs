@@ -8,6 +8,7 @@ using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.ComponentModel;
 using System.Collections.ObjectModel;
+using TrainingCsharpGft.Api.Exceptions;
 
 namespace TrainingCsharpGft.Api.Model
 {
@@ -82,7 +83,7 @@ namespace TrainingCsharpGft.Api.Model
             else
             {
                 log.Error($"Attempted to create an account with name {account.Name} which already exists.");
-                throw new Exception("Account with this name already exists!");
+                throw new WrongValueException("Account with this name already exists");
             }
         }
 

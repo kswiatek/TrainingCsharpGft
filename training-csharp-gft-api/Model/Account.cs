@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Runtime.Serialization;
+using TrainingCsharpGft.Api.Exceptions;
 
 namespace TrainingCsharpGft.Api
 {
@@ -43,7 +44,7 @@ namespace TrainingCsharpGft.Api
                 {
                     log.Error($"Insufficient funds - attempted to get {amount} " +
                         $"from account {name} but its ballance was {ballance}.");
-                    throw new Exception("Insufficient funds");
+                    throw new InsufficientFundsException();
                 }
                 log.Info($"Account {name} has decreased its amount by {amount}. Its ballance is now {ballance}.");
             }

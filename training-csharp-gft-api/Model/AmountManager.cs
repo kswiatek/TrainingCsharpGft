@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using TrainingCsharpGft.Api.Exceptions;
 
 namespace TrainingCsharpGft.Api.Model
 {
@@ -50,9 +51,9 @@ namespace TrainingCsharpGft.Api.Model
         {
             Thread.Sleep(1000);
             if(String.IsNullOrEmpty(toppedUpAccountName))
-                throw new Exception("Empty account name was given");
+                throw new WrongValueException("Empty account name was given");
             if (amount <= 0)
-                throw new Exception("Given amount was 0 or lower");
+                throw new WrongValueException("Given amount was 0 or lower");
             Account ac = persistance.Get(toppedUpAccountName);
             ac.Add(amount);
         }

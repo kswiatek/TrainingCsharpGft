@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using NUnit.Framework;
 using TrainingCsharpGft.Api;
 using TrainingCsharpGft.Api.Model;
+using TrainingCsharpGft.Api.Exceptions;
 using Moq;
 
 namespace TrainingCsharpGft.Tests.Model
@@ -61,7 +62,15 @@ namespace TrainingCsharpGft.Tests.Model
         {
             double ballance = storage.Get(accountName).Ballance;
 
-            amountManager.TopUp("Acc1", amount);
+            try
+            {
+                amountManager.TopUp("Acc1", amount);
+            }
+            catch(Exception ex)
+            {
+                if (ex.GetType() != typeof(WrongValueException))
+                    throw ex;
+            }
 
             Assert.AreEqual(ballance + amount, storage.Get(accountName).Ballance);
         }
@@ -69,18 +78,18 @@ namespace TrainingCsharpGft.Tests.Model
         [TestCase(-100)]
         [TestCase(-1)]
         [TestCase(-0.654)]
-        public void AmountManagerShouldNotAcceptNegativeValuesOnTopUp(double value)
+        public void AmountManagerShouldNotAcceptNegativeValuesOnTopUp_WrongValueExceptionShouldBeThrown(double value)
         {
-            Assert.Throws<Exception>(() =>
+            Assert.Throws<WrongValueException> (() =>
             {
                 amountManager.TopUp("Acc1", value);
             });
         }
 
         [Test]
-        public void BallanceOfAnyAccountShouldNotBecomeLessThanZeroAndApprpriateTypeOfExceptionShouldBeThrown()
+        public void BallanceOfAnyAccountShouldNotBecomeLessThanZero_InsufficientFundsExceptionShouldBeThrown()
         {
-            Assert.Throws<Exception>(() => 
+            Assert.Throws<InsufficientFundsException>(() => 
             {
                 amountManager.Transfer("Acc2", "Acc1", 2010);
             });
