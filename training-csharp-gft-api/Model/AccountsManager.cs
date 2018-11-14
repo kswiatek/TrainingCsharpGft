@@ -1,13 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
-using System.ComponentModel;
-using System.Collections.ObjectModel;
 using TrainingCsharpGft.Api.Exceptions;
 
 namespace TrainingCsharpGft.Api.Model

@@ -1,19 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Input;
 using System.Windows;
 using TrainingCsharpGft.Commands;
 using TrainingCsharpGft.Api;
 using System.ComponentModel;
-using System.Text.RegularExpressions;
 using System.Collections.ObjectModel;
 using TrainingCsharpGft.Api.Model;
-using System.Collections.Concurrent;
-using System.Windows.Threading;
-using System.Threading;
 
 namespace TrainingCsharpGft.ViewModel
 {
