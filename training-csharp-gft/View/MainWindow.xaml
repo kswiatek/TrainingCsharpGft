@@ -73,7 +73,8 @@
                 <StackPanel Grid.Column="0" Grid.Row="0" Margin="10" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
                     <Label Content="Enter amount:" Padding="0 5 5 5"/>
                     <TextBox InputScope="" Background="LightBlue" TextWrapping="Wrap" Name="txt_topUpAmount" VerticalAlignment="Stretch" MinHeight="22"
-                      Text="{Binding topUpAmount, Mode=TwoWay, Source={StaticResource vm}, UpdateSourceTrigger=PropertyChanged}"/>
+                      Text="{Binding topUpAmount, Mode=TwoWay, Source={StaticResource vm}, UpdateSourceTrigger=PropertyChanged}" 
+                             TextChanged="txt_topUpAmount_TextChanged"/>
                 </StackPanel>
                 <Button Grid.Column="0" Grid.Row="3" Margin="10" Content="Top-up" Name="btn_topUp" 
                     Command="{Binding ExecuteTopUpAccountCommand, Source={StaticResource vm}}"/>
@@ -92,7 +93,8 @@
                 <StackPanel Grid.Column="3" Grid.Row="0" Margin="10">
                     <Label Content="Enter amount:" Padding="0 5 5 5"/>
                     <TextBox Background="LightBlue" TextWrapping="Wrap" Name="txt_transferAmount" MinHeight="22"
-                     Text="{Binding transferAmount, Mode=TwoWay, Source={StaticResource vm}, UpdateSourceTrigger=PropertyChanged}"/>
+                     Text="{Binding transferAmount, Mode=TwoWay, Source={StaticResource vm}, UpdateSourceTrigger=PropertyChanged}" 
+                             TextChanged="txt_transferAmount_TextChanged"/>
                 </StackPanel>
                 <Button Grid.Column="2" Grid.ColumnSpan="2" Grid.Row="3" Margin="10" Content="Transfer to selected account" 
                 Name="btn_transferToSelectedAccount"
@@ -105,7 +107,6 @@
                Visibility="{Binding lbl_deletingAccountVisibility, Mode=OneWay, Source={StaticResource vm}, UpdateSourceTrigger=PropertyChanged}"/>
         <Button Grid.Column="2" Grid.ColumnSpan="2" Grid.Row="5" Margin="10" Content="Delete your account" Name="btn_deleteYourAccount"
                 Command="{Binding ExecuteDeleteYourAccountCommand, Source={StaticResource vm}}"/>
-
 
     </Grid>
 </Window>

@@ -32,8 +32,29 @@ namespace TrainingCsharpGft
 
         public MainWindow(ViewModel.ViewModel vm) : this()
         {
-            this.DataContext = vm;
+            DataContext = vm;
         }
 
+        private void txt_topUpAmount_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (btn_topUp == null)
+                return;
+
+            if (double.TryParse(txt_topUpAmount.Text, out double temp))
+                btn_topUp.IsEnabled = true;
+            else
+                btn_topUp.IsEnabled = false;
+        }
+
+        private void txt_transferAmount_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (btn_transferToSelectedAccount == null)
+                return;
+
+            if (double.TryParse(txt_transferAmount.Text, out double temp))
+                btn_transferToSelectedAccount.IsEnabled = true;
+            else
+                btn_transferToSelectedAccount.IsEnabled = false;
+        }
     }
 }
