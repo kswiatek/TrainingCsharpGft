@@ -9,7 +9,7 @@ namespace TrainingCsharpGft.Api
         private static readonly log4net.ILog log = LogHelper.GetLogger();
         private object obj = new object();
         private string name;
-        private double ballance;
+        private double ballance = 0;
         public string Name
         {
             get { return name; }
